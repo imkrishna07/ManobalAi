@@ -1,0 +1,18 @@
+Evaluator model smoke test
+==========================
+
+Command (run from project root):
+docker compose build backend
+docker compose run --rm --no-deps backend python -m pytest -q -o addopts= tests/test_evaluator_model_smoke.py
+
+Result: PASSED
+1 passed, 3 warnings in 0.93s
+
+Warnings: scikit-learn reports that the LightGBM estimator was fitted with
+feature names while the contribution calculation passed an array. Prediction
+completed and the assertions passed. Contributions are optional and this
+warning does not affect the smoke test's inference result.
+
+Coverage: model artifacts load; raw synthetic weekly records produce exactly
+44 backend features in the metadata order; prediction returns a valid risk
+band and three finite class probabilities summing to 1.
