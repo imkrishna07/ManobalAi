@@ -183,9 +183,9 @@ export default function RoleLogin() {
               <Icon size={13} /> {meta.label}
             </div>
             <div className="local-demo-hint" role="note">
-              <strong>Local demo login</strong>
+              <strong>Demo account credentials</strong>
               <span>{DEMO_CREDENTIALS[params.workspace ?? ""]?.username} / {DEMO_CREDENTIALS[params.workspace ?? ""]?.password}</span>
-              <small>Requires <code>ENABLE_DEMO_ACCOUNTS=true</code> in backend/.env and a running backend.</small>
+              <small>The backend creates these accounts when demo access is enabled.</small>
             </div>
 
             <form onSubmit={handleSubmit} data-testid="login-form" className="gate-form">

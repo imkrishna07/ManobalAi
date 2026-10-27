@@ -116,9 +116,9 @@ export default function AdminLogin() {
               <ShieldCheck size={13} /> Administrator
             </div>
             <div className="local-demo-hint" role="note">
-              <strong>Local demo login</strong>
+              <strong>Demo account credentials</strong>
               <span>demo_admin / Demo@Admin1</span>
-              <small>Requires <code>ENABLE_DEMO_ACCOUNTS=true</code> in backend/.env and a running backend.</small>
+              <small>The backend creates this account when demo access is enabled.</small>
             </div>
 
             <form onSubmit={handleSubmit} data-testid="admin-login-form" className="gate-form">

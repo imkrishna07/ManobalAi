@@ -1,0 +1,35 @@
+# Local development only. Do not expose these demo credentials or this JWT
+# secret in a shared or production deployment.
+services:
+  mongodb:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - manobal_mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "mongodb://localhost:27017/admin", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      MONGO_URL: mongodb://mongodb:27017
+      DB_NAME: manobal_ai
+      AUTH_SECRET_KEY: local-only-manobal-demo-secret-change-before-deployment
+      ENABLE_DEMO_ACCOUNTS: "true"
+      CORS_ORIGINS: http://localhost:3000
+    ports:
+      - "127.0.0.1:8001:8001"
+    command: ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8001"]
+
+volumes:
+  manobal_mongo_data:

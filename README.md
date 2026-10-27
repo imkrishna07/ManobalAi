@@ -10,6 +10,21 @@
 
 </div>
 
+## Run locally and sign in
+
+The demo accounts are provisioned only when explicitly enabled. The simplest
+local setup is:
+
+1. Start Docker Desktop.
+2. From the project root, run `docker compose up --build backend`. This starts
+   MongoDB and the API on port 8001; API startup creates any missing demo accounts.
+3. In a second terminal, run `cd frontend && yarn dev`; open
+   `http://localhost:3000`. The frontend proxies `/api` to the backend.
+
+To run the API without Docker, use a local MongoDB, copy
+`backend/.env.example` to `backend/.env`, set a private `AUTH_SECRET_KEY`, and
+follow the backend install/start instructions in the architecture docs.
+
 ---
 
 ## 📌 Executive Summary
