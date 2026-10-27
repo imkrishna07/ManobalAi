@@ -59,6 +59,11 @@ export default function OfficerDashboard() {
             <Button onClick={() => seedMutation.mutate()} disabled={seedMutation.isPending} data-testid="seed-demo-data-button">
               {seedMutation.isPending ? "Preparing…" : "Load DEMO DATA"}<ArrowRight size={16} />
             </Button>
+            {seedMutation.isError && (
+              <p className="login-error" role="alert">
+                Demo data could not be prepared. Restart the backend and check its logs, then try again.
+              </p>
+            )}
           </Card>
         </div>
       </div>
