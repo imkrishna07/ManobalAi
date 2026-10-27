@@ -30,6 +30,9 @@ services:
       CORS_ORIGINS: http://localhost:3000
     ports:
       - "127.0.0.1:8001:8001"
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./backend/artifacts:/app/model-artifacts-mirror
     command: ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8001"]
 
 volumes:

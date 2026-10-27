@@ -1,6 +1,8 @@
 {
-  "model_version": "0.2.0-sih-final",
-  "trained_at_utc": "2026-09-06T21:49:27.357428+00:00",
+  "product_name": "Manobal-AI",
+  "model_version": "0.3.0-synthetic-backend-compatible",
+  "feature_version": "1.1.0",
+  "created_at_utc": "2026-10-27T12:34:47.595798+00:00",
   "feature_list_in_order": [
     "years_of_service",
     "hardship_posting_flag",
@@ -47,71 +49,83 @@
     "sleep_hours_biometric__delta_wow",
     "sleep_hours_biometric__was_missing"
   ],
+  "feature_count": 44,
   "band_order": [
     "Low",
     "Moderate",
     "High"
   ],
-  "metrics": {
-    "run_timestamp_utc": "2026-09-06T21:49:27.357428+00:00",
-    "cv_macro_f1_mean": 0.6346501389662974,
-    "cv_macro_f1_std": 0.006322727400413295,
-    "test_macro_f1": 0.7317820571139553,
-    "dummy_baseline_macro_f1": 0.2303284172557233,
-    "beats_dummy_baseline": true,
-    "per_class": {
-      "Low": {
-        "precision": 0.7804929876753082,
-        "recall": 0.9277595352361707,
-        "f1": 0.8477784189267167,
-        "support": 3959
+  "decision_policy": "calibrated_probability_argmax (matches backend inference)",
+  "training_data": {
+    "source": "reproducibly generated synthetic records",
+    "seed": 42,
+    "people_by_split": {
+      "train": 975,
+      "validation": 225,
+      "test": 300
+    },
+    "rows_by_split": {
+      "train": 25350,
+      "validation": 5850,
+      "test": 7800
+    },
+    "class_rates": {
+      "Low": 0.5498224852071006,
+      "Moderate": 0.27826429980276135,
+      "High": 0.17191321499013806
+    },
+    "label_definition": "Simulated latent strain rule; not a clinical or real-personnel outcome."
+  },
+  "evaluation": {
+    "test_metrics": {
+      "accuracy": 0.6503846153846153,
+      "balanced_accuracy": 0.5807688204438916,
+      "macro_f1": 0.5767802485984871,
+      "log_loss": 0.7578612548421503,
+      "recall_by_band": {
+        "Low": 0.8365785813630042,
+        "Moderate": 0.3313769751693002,
+        "High": 0.5743509047993706
       },
-      "Moderate": {
-        "precision": 0.7570921985815603,
-        "recall": 0.5804259175351155,
-        "f1": 0.6570915619389587,
-        "support": 2207
-      },
-      "High": {
-        "precision": 0.7631578947368421,
-        "recall": 0.6304347826086957,
-        "f1": 0.6904761904761905,
-        "support": 1334
+      "classification_report": {
+        "Low": {
+          "precision": 0.7517183920016663,
+          "recall": 0.8365785813630042,
+          "f1-score": 0.7918815139879319,
+          "support": 4314.0
+        },
+        "Moderate": {
+          "precision": 0.4416365824308063,
+          "recall": 0.3313769751693002,
+          "f1-score": 0.378643280887284,
+          "support": 2215.0
+        },
+        "High": {
+          "precision": 0.5459985041136873,
+          "recall": 0.5743509047993706,
+          "f1-score": 0.5598159509202454,
+          "support": 1271.0
+        },
+        "accuracy": 0.6503846153846153,
+        "macro avg": {
+          "precision": 0.57978449284872,
+          "recall": 0.5807688204438916,
+          "f1-score": 0.5767802485984871,
+          "support": 7800.0
+        },
+        "weighted avg": {
+          "precision": 0.630141316911272,
+          "recall": 0.6503846153846153,
+          "f1-score": 0.6367176656575518,
+          "support": 7800.0
+        }
       }
     },
-    "brier_scores": {
-      "Low": 0.12317667633197456,
-      "Moderate": 0.12949034714097143,
-      "High": 0.07719307036518906
-    },
-    "trajectory_backtest": {
-      "n_personnel_reaching_high": 477,
-      "n_caught_by_early_warning": 236,
-      "pct_caught": 0.495,
-      "median_lead_time_weeks": 8.0,
-      "mean_lead_time_weeks": 8.14406779661017,
-      "pct_caught_2plus_weeks_ahead": 0.468
-    },
-    "trust_engine_noise_correlation": -0.03453718157595815,
-    "n_train_rows": 31500,
-    "n_test_rows": 7500,
-    "temporal_cutoff_week": 21,
-    "feature_count": 44
+    "limitation": "Metrics measure recovery of the synthetic simulation labels only."
   },
-  "notes": "Synthetic training data only. Not for real deployment without revalidation on real, ethics-board-approved data.",
-  "feature_version": "1.1.0",
-  "updated_at_utc": "2026-09-06T21:50:24.592062+00:00",
-  "upgrade_modules_added": [
-    "data_categories_audit",
-    "change_engine",
-    "fusion_v2",
-    "temporal_shap",
-    "counterfactual_engine",
-    "fairness_eval",
-    "drift_monitor",
-    "feedback_store",
-    "inference_pipeline"
-  ],
-  "fairness_report_path": "reports/fairness_report.json",
-  "drift_report_path": "reports/drift_report.json"
+  "environment": {
+    "scikit_learn": "1.8.0",
+    "lightgbm": "4.6.0"
+  },
+  "notes": "Synthetic hackathon prototype. Not validated for real personnel or operational decisions."
 }
