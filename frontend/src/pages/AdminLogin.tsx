@@ -40,7 +40,7 @@ export default function AdminLogin() {
         setError("Invalid username or password.");
       } else if (status === 403) {
         setError("This account cannot access the admin workspace.");
-      } else if (status === 404 || status === 0) {
+      } else if (status === 404 || status === 0 || status === undefined) {
         setError("Backend server unavailable. Please ensure the API is running.");
       } else {
         setError("Login failed. Please try again.");
@@ -113,6 +113,10 @@ export default function AdminLogin() {
             <div className="workspace-role-chip workspace-role-chip--admin">
               <ShieldCheck size={13} /> Administrator
             </div>
+            <p className="demo-notice" role="note">
+              Local demo login: <strong>demo_admin</strong> / Demo@Admin1.
+              Enable <code>ENABLE_DEMO_ACCOUNTS=true</code> in backend/.env first.
+            </p>
 
             <form onSubmit={handleSubmit} data-testid="admin-login-form" className="gate-form">
               <div className="demo-login-fields">

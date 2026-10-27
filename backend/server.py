@@ -32,6 +32,13 @@ from lib.db import client, db, ensure_indexes
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.index_task = asyncio.create_task(ensure_indexes())  # background: a big index build must not block boot
+    # Demo accounts are opt-in so a deployment never silently creates accounts
+    # with published sample passwords. Local demo users can be enabled in .env.
+    if os.environ.get("ENABLE_DEMO_ACCOUNTS", "false").strip().lower() == "true":
+        from seed import provision_demo_accounts
+
+        created = await provision_demo_accounts()
+        logger.info("Demo account provisioning complete; created %d account(s)", len(created))
     yield
     client.close()
 

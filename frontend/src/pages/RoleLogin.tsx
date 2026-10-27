@@ -62,6 +62,11 @@ const HOME_PATHS: Record<UserRole, string> = {
 };
 
 const ROLE_MISMATCH = "Your account does not have access to this workspace.";
+const DEMO_CREDENTIALS: Record<string, { username: string; password: string }> = {
+  officer: { username: "demo_officer", password: "Demo@Officer1" },
+  commander: { username: "demo_commander", password: "Demo@Commander1" },
+  personnel: { username: "demo_personnel", password: "Demo@Personnel1" },
+};
 
 export default function RoleLogin() {
   const params = useParams<{ workspace: string }>();
@@ -78,7 +83,8 @@ export default function RoleLogin() {
       beginSession();
       // Seeding is welfare-officer specific: Commanders and Personnel never seed.
       if (authResponse.role === "WELFARE_OFFICER") {
-        await apiPost<DemoSeedResponse>("/demo/seed", {});
+        // Demo data availability must not prevent a valid user from signing in.
+        await apiPost<DemoSeedResponse>("/demo/seed", {}).catch(() => undefined);
       }
       return authResponse;
     },
@@ -97,7 +103,7 @@ export default function RoleLogin() {
         setError("Invalid username or password.");
       } else if (status === 403) {
         setError("This account cannot access the workspace.");
-      } else if (status === 404 || status === 0) {
+      } else if (status === 404 || status === 0 || status === undefined) {
         setError("Backend server unavailable. Please ensure the API is running.");
       } else {
         setError("Login failed. Please try again.");
@@ -174,6 +180,11 @@ export default function RoleLogin() {
             <div className={`workspace-role-chip ${isCommander ? "workspace-role-chip--commander" : ""}`}>
               <Icon size={13} /> {meta.label}
             </div>
+            <p className="demo-notice" role="note">
+              Local demo login: <strong>{DEMO_CREDENTIALS[params.workspace ?? ""]?.username}</strong>
+              {" / "}{DEMO_CREDENTIALS[params.workspace ?? ""]?.password}. Enable
+              <code>ENABLE_DEMO_ACCOUNTS=true</code> in backend/.env first.
+            </p>
 
             <form onSubmit={handleSubmit} data-testid="login-form" className="gate-form">
               <div className="demo-login-fields">
