@@ -13,7 +13,7 @@ import joblib
 import numpy as np
 import pandas as pd
 
-from lib.feature_engineering import features_for_latest_week, records_to_frame
+from lib.feature_engineering import features_for_latest_week, get_feature_columns, records_to_frame
 
 
 class ModelArtifactError(RuntimeError):
@@ -58,6 +58,11 @@ class InferenceEngine:
                 self.risk_model = joblib.load(self.artifact_dir / "risk_model.pkl")
                 self.baseline_model = joblib.load(self.artifact_dir / "baseline_model.pkl")
                 self.preprocessing_pipeline = joblib.load(self.artifact_dir / "preprocessing_pipeline.pkl")
+            expected_features = get_feature_columns()
+            if self.feature_names != expected_features:
+                raise ModelArtifactError(
+                    "Artifact feature schema/order does not match backend feature engineering"
+                )
             if len(self.feature_names) != 44 or getattr(self.risk_model, "n_features_in_", 0) != 44:
                 raise ModelArtifactError("Artifact feature metadata and model input width do not match")
             self.load_error = None
