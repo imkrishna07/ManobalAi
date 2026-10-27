@@ -105,6 +105,8 @@ export default function RoleLogin() {
         setError("This account cannot access the workspace.");
       } else if (status === 404 || status === 0 || status === undefined) {
         setError("Backend server unavailable. Please ensure the API is running.");
+      } else if (status >= 500) {
+        setError("The backend could not sign you in. Ensure the API and MongoDB are running, then restart the backend.");
       } else {
         setError("Login failed. Please try again.");
       }
@@ -180,11 +182,11 @@ export default function RoleLogin() {
             <div className={`workspace-role-chip ${isCommander ? "workspace-role-chip--commander" : ""}`}>
               <Icon size={13} /> {meta.label}
             </div>
-            <p className="demo-notice" role="note">
-              Local demo login: <strong>{DEMO_CREDENTIALS[params.workspace ?? ""]?.username}</strong>
-              {" / "}{DEMO_CREDENTIALS[params.workspace ?? ""]?.password}. Enable
-              <code>ENABLE_DEMO_ACCOUNTS=true</code> in backend/.env first.
-            </p>
+            <div className="local-demo-hint" role="note">
+              <strong>Local demo login</strong>
+              <span>{DEMO_CREDENTIALS[params.workspace ?? ""]?.username} / {DEMO_CREDENTIALS[params.workspace ?? ""]?.password}</span>
+              <small>Requires <code>ENABLE_DEMO_ACCOUNTS=true</code> in backend/.env and a running backend.</small>
+            </div>
 
             <form onSubmit={handleSubmit} data-testid="login-form" className="gate-form">
               <div className="demo-login-fields">

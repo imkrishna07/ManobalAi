@@ -42,6 +42,8 @@ export default function AdminLogin() {
         setError("This account cannot access the admin workspace.");
       } else if (status === 404 || status === 0 || status === undefined) {
         setError("Backend server unavailable. Please ensure the API is running.");
+      } else if (status >= 500) {
+        setError("The backend could not sign you in. Ensure the API and MongoDB are running, then restart the backend.");
       } else {
         setError("Login failed. Please try again.");
       }
@@ -113,10 +115,11 @@ export default function AdminLogin() {
             <div className="workspace-role-chip workspace-role-chip--admin">
               <ShieldCheck size={13} /> Administrator
             </div>
-            <p className="demo-notice" role="note">
-              Local demo login: <strong>demo_admin</strong> / Demo@Admin1.
-              Enable <code>ENABLE_DEMO_ACCOUNTS=true</code> in backend/.env first.
-            </p>
+            <div className="local-demo-hint" role="note">
+              <strong>Local demo login</strong>
+              <span>demo_admin / Demo@Admin1</span>
+              <small>Requires <code>ENABLE_DEMO_ACCOUNTS=true</code> in backend/.env and a running backend.</small>
+            </div>
 
             <form onSubmit={handleSubmit} data-testid="admin-login-form" className="gate-form">
               <div className="demo-login-fields">

@@ -3247,6 +3247,21 @@ body {
   color: #9a6f1f;
 }
 .demo-notice { color: #52615b; }
+.local-demo-hint {
+  display: grid;
+  gap: 5px;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border: 1px solid #d8dfd7;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.56);
+  color: #52615b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.local-demo-hint > strong { color: #19785f; }
+.local-demo-hint small { font-size: 11px; }
+.local-demo-hint code { white-space: nowrap; }
 
 /* legacy login forms */
 .role-option {
