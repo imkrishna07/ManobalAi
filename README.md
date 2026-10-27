@@ -53,3 +53,35 @@ You’ll need Docker Desktop and Node.js with Yarn installed.
 
    ```bash
    docker compose up --build backend
+   ```
+
+   Keep this terminal open. It starts MongoDB and the FastAPI backend.
+
+3. In a second terminal, start the frontend:
+
+   ```bash
+   cd frontend
+   yarn install
+   yarn dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000). Sign in with the local demo credentials shown on the login page. In the Welfare Officer workspace, load the synthetic demo data if prompted.
+
+## Model and Evaluation
+
+The backend uses model version `0.3.0-synthetic-backend-compatible` and the project's 44-feature inference contract. The model card in [`artifacts/MODEL_CARD.md`](artifacts/MODEL_CARD.md) describes its synthetic data, test metrics, and limitations.
+
+This model is for a hackathon demonstration only. Its metrics measure agreement with generated synthetic labels, not real-world personnel welfare outcomes. It is not validated for operational use.
+
+## Project Structure
+
+```text
+frontend/       React and TypeScript application
+backend/        FastAPI service, inference code, and training script
+artifacts/      Model, preprocessing pipeline, metadata, and model card
+docs/           Project and architecture documentation
+```
+
+## Responsible Use
+
+Manobal-AI is a human-in-the-loop welfare decision-support prototype. It does not diagnose personnel or initiate welfare actions automatically. Any follow-up remains a human decision.
