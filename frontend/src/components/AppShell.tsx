@@ -3,6 +3,7 @@ import { Activity, BrainCircuit, ChevronRight, Fingerprint, HeartHandshake, LogO
 import { useState } from "react";
 import { getAuthData } from "@/lib/auth";
 import { endSession } from "@/lib/session";
+import { IS_STATIC_DEMO } from "@/lib/api";
 
 const ROLE_LABELS: Record<string, string> = {
   PERSONNEL: "Personnel",
@@ -84,7 +85,7 @@ export default function AppShell() {
       </aside>
       {open && <button className="sidebar-backdrop" onClick={() => setOpen(false)} aria-label="Close menu overlay" data-testid="sidebar-backdrop" />}
       <main className="platform-main">
-        <header className="platform-topbar" data-testid="platform-topbar"><button className="sidebar-menu" onClick={() => setOpen(true)} aria-label="Open menu" data-testid="sidebar-menu-button"><Menu size={19} /></button><div className="platform-crumb"><span>Manobal-AI</span><ChevronRight size={13} /><strong>{crumb}</strong></div><div className="topbar-right"><span className="live-status"><i /> Model gateway online</span><span className="demo-chip">DEMO MODE</span><div className="top-avatar">{ROLE_AVATARS[role] ?? "?"}</div></div></header>
+        <header className="platform-topbar" data-testid="platform-topbar"><button className="sidebar-menu" onClick={() => setOpen(true)} aria-label="Open menu" data-testid="sidebar-menu-button"><Menu size={19} /></button><div className="platform-crumb"><span>Manobal-AI</span><ChevronRight size={13} /><strong>{crumb}</strong></div><div className="topbar-right"><span className="live-status"><i /> {IS_STATIC_DEMO ? "Browser demo · simulated results" : "Model gateway online"}</span><span className="demo-chip">DEMO MODE</span><div className="top-avatar">{ROLE_AVATARS[role] ?? "?"}</div></div></header>
         <Outlet />
       </main>
     </div>
