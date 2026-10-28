@@ -62,12 +62,6 @@ const HOME_PATHS: Record<UserRole, string> = {
 };
 
 const ROLE_MISMATCH = "Your account does not have access to this workspace.";
-const DEMO_CREDENTIALS: Record<string, { username: string; password: string }> = {
-  officer: { username: "demo_officer", password: "Demo@Officer1" },
-  commander: { username: "demo_commander", password: "Demo@Commander1" },
-  personnel: { username: "demo_personnel", password: "Demo@Personnel1" },
-};
-
 export default function RoleLogin() {
   const params = useParams<{ workspace: string }>();
   const navigate = useNavigate();
@@ -78,7 +72,11 @@ export default function RoleLogin() {
 
   const loginMutation = useMutation({
     mutationFn: async () => {
-      const authResponse = await apiPost<AuthToken>("/auth/login", { username, password });
+      const authResponse = await apiPost<AuthToken>("/auth/login", {
+        username,
+        password,
+        demo_role: meta.role,
+      });
       setAuthData(authResponse);
       beginSession();
       // Seeding is welfare-officer specific: Commanders and Personnel never seed.
@@ -176,16 +174,16 @@ export default function RoleLogin() {
             <span className="demo-command-kicker">{meta.kicker}</span>
             <h2>Secure workspace<br /><em>access.</em></h2>
             <p>
-              Enter your credentials to enter this workspace. Access is verified against
-              your account role by the backend.
+              Enter any username and password to open this demo workspace. Demo access
+              is enabled only in the local presentation environment.
             </p>
             <div className={`workspace-role-chip ${isCommander ? "workspace-role-chip--commander" : ""}`}>
               <Icon size={13} /> {meta.label}
             </div>
             <div className="local-demo-hint" role="note">
-              <strong>Demo account credentials</strong>
-              <span>{DEMO_CREDENTIALS[params.workspace ?? ""]?.username} / {DEMO_CREDENTIALS[params.workspace ?? ""]?.password}</span>
-              <small>The backend creates these accounts when demo access is enabled.</small>
+              <strong>Open demo access</strong>
+              <span>Any non-empty username and password</span>
+              <small>This workspace opens with its seeded demo role.</small>
             </div>
 
             <form onSubmit={handleSubmit} data-testid="login-form" className="gate-form">

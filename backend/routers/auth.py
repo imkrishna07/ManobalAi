@@ -4,6 +4,7 @@ Login endpoint and authenticated user info endpoint.
 """
 
 import logging
+import os
 from datetime import datetime, timezone
 from uuid import uuid4
 
@@ -33,6 +34,44 @@ async def login(payload: dict):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials",
+        )
+
+    # Local presentation shortcut: accepts any non-empty credentials, but only
+    # when explicitly enabled by the local/demo deployment. The requested
+    # workspace is mapped to its pre-seeded demo identity, so protected routes
+    # still receive a normal JWT backed by an active database user.
+    demo_role = payload.get("demo_role")
+    if (
+        os.environ.get("ENABLE_DEMO_ACCOUNTS", "false").strip().lower() == "true"
+        and demo_role in {"PERSONNEL", "WELFARE_OFFICER", "COMMANDER"}
+    ):
+        user = await db.users.find_one({"role": demo_role, "is_demo_user": True, "active": True})
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Demo account is unavailable. Restart the backend to provision demo accounts.",
+            )
+        token = create_access_token(
+            user_id=user["id"],
+            username=user["username"],
+            role=user["role"],
+        )
+        await audit_log(
+            "login_success",
+            user_id=user["id"],
+            username=user["username"],
+            role=user["role"],
+            endpoint="/auth/login",
+            http_method="POST",
+            success=True,
+            reason="local_demo_bypass",
+        )
+        logger.info("Local demo access granted for role=%s", user["role"])
+        return AuthToken(
+            access_token=token,
+            user_id=user["id"],
+            username=user["username"],
+            role=user["role"],
         )
 
     # Lookup user by username
